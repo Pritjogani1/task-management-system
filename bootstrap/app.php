@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'guest' => RedirectIfAuthenticated::class,
         ]);
 
+        
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
