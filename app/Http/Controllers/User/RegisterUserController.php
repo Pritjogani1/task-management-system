@@ -58,7 +58,7 @@ class RegisterUserController extends Controller
     {
         Auth::guard('user')->logout();
 
-        return redirect()->route('login');
+        return redirect()->route('user.login');
     }
 
     public function dashboard()

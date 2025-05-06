@@ -20,12 +20,31 @@
         <div class="flex-1 px-4 py-6">
             <ul class="space-y-4">
                 <li><a href="{{ route('admin.dashboard') }}" class="block hover:bg-gray-700 px-3 py-2 rounded">Dashboard</a></li>
+                @can('user')
                 <li><a href="{{route('admin.users.index')}}"  class="block hover:bg-gray-700 px-3 py-2 rounded">Users</a></li>
+                @endcan
                 <li><a href="{{route('admin.tasks.all')}}" class="block hover:bg-gray-700 px-3 py-2 rounded">Tasks</a></li>
                 <li><a href="#" class="block hover:bg-gray-700 px-3 py-2 rounded">Projects</a></li>
                 <li><a href="#" class="block hover:bg-gray-700 px-3 py-2 rounded">Settings</a></li>
             </ul>
+            <a href="{{ route('admin.admins.index') }}" :active="request()->is('admins*')"
+                class="flex items-center px-4 py-3 text-gray-100 hover:bg-violet-700/50 rounded-lg">
+                <i class="fas fa-users mr-3"></i>
+                <span>Admins</span>
+            </a>
+            <a href="{{ route('admin.role') }}" :active="request()->is('admin/role*')"
+                class="flex items-center px-4 py-3 text-gray-100 hover:bg-violet-700/50 rounded-lg">
+                <i class="fas fa-users mr-3"></i>
+                <span>Roles</span>
+            </a>
+            <a href="{{ route('admin.permission') }}" :active="request()->is('admin/permission*')"
+                class="flex items-center px-4 py-3 text-gray-100 hover:bg-violet-700/50 rounded-lg">
+                <i class="fas fa-users mr-3"></i>
+                <span>Permissions</span>
+            </a>
         </div>
+       
+        
         <!-- Logout Button -->
         <div class="p-4">
             <form method="POST" action="{{ route('admin.logout') }}">
