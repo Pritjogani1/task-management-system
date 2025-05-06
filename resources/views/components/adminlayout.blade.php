@@ -8,6 +8,8 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toasty.js@1.0.1/dist/toasty.min.js"></script>
+    <!-- Add Flowbite CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
     @vite('resources/css/app.css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -24,8 +26,7 @@
                 <li><a href="{{route('admin.users.index')}}"  class="block hover:bg-gray-700 px-3 py-2 rounded">Users</a></li>
                 @endcan
                 <li><a href="{{route('admin.tasks.all')}}" class="block hover:bg-gray-700 px-3 py-2 rounded">Tasks</a></li>
-                <li><a href="#" class="block hover:bg-gray-700 px-3 py-2 rounded">Projects</a></li>
-                <li><a href="#" class="block hover:bg-gray-700 px-3 py-2 rounded">Settings</a></li>
+
             </ul>
             <a href="{{ route('admin.admins.index') }}" :active="request()->is('admins*')"
                 class="flex items-center px-4 py-3 text-gray-100 hover:bg-violet-700/50 rounded-lg">
@@ -69,6 +70,9 @@
         </main>
     </div>
 
+    <!-- Add Flowbite JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+    
     <script>
         @if(Session::has('success'))
             Toastify({

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,8 +42,8 @@
     </style>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="bg-gray-50">
-    <nav class="bg-[var(--primary-color)] shadow-lg fixed w-full top-0 left-0 right-0 z-50">
+<body class="bg-gray-50 flex flex-col min-h-screen">
+    <nav class="bg-[var(--primary-color)] shadow-lg w-full z-50">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <!-- Logo -->
@@ -123,12 +123,12 @@
     </div>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 pt-20 pb-12">
+    <main class="container mx-auto px-4 pt-20 pb-12 flex-grow">
         {{ $slot }}
     </main>
 
     <!-- Footer -->
-    <footer class="bg-[var(--primary-color)] text-white py-8">
+    <footer class="bg-[var(--primary-color)] text-white py-8 mt-auto">
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0">

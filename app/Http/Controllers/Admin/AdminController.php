@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -22,7 +24,12 @@ class AdminController extends Controller
         return redirect()->route('admin.login');
     }
     public function dashboard() {
-        return view("admin.admin");
+        $totalTasks = Task::all()->count();
+        $recentTasks = Task::orderBy('created_at', 'desc')->take(5)->get();
+    
+        $totalUsers = User::all()->count();
+        
+        return view("admin.admin", compact('totalTasks', 'totalUsers', 'recentTasks'));
     }
     public function logout() {
         auth()->guard('admin')->logout();

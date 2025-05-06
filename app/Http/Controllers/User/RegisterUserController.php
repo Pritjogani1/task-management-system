@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -65,6 +66,7 @@ class RegisterUserController extends Controller
 
     public function dashboard()
     {
-        return view('user.dashboard');
+        $tasks = Task::where('user_id', Auth::user()->id)->with('comments')->get();
+        return view('user.dashboard', compact('tasks'));
     }
 }

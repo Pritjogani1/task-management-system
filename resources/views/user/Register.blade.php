@@ -4,7 +4,7 @@
             <!-- Left Side - Registration Form -->
             <div class="w-full md:w-1/2 flex items-center justify-center p-6">
                 <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Fashion Store Registration</h2>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">task mangement app</h2>
                     
                     <form method="post" action="{{ route('register') }}">
                         @csrf
@@ -74,10 +74,7 @@
                 </div>
             </div>
 
-            <!-- Right Side - Image -->
-            <div class="hidden md:block md:w-1/2 bg-cover bg-center" 
-                 style="background-image: url('{{Vite::asset('resources/images/registerpg.jpeg')}}')">
-            </div>
+            
         </div>
     </body>
     
