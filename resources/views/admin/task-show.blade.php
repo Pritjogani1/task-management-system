@@ -98,6 +98,38 @@
                 </div>
             @endforeach
         </div>
+        
+        <!-- Comments Section -->
+        <div class="mt-8 bg-white p-6 rounded-xl shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Comments</h3>
+            
+            <!-- Display existing comments -->
+            <div class="space-y-4 mb-6">
+                @forelse($singleTask->comments as $comment)
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="font-medium">{{ $comment->user_type == 'admin' ? 'Admin' : 'User' }}</p>
+                                <p class="text-sm text-gray-500">{{ $comment->created_at->format('M d, Y H:i') }}</p>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-gray-700">{{ $comment->content }}</p>
+                    </div>
+                @empty
+                    <p class="text-gray-500 italic">No comments yet.</p>
+                @endforelse
+            </div>
+            
+            <!-- Add comment form -->
+            <form action="{{ route('admin.tasks.comments.store', $singleTask->id) }}" method="POST">
+                @csrf
+                <div class="mb-4">
+                    <label for="content" class="block text-sm font-semibold text-gray-700 mb-1">Add a Comment</label>
+                    <textarea name="content" id="content" rows="3" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300" placeholder="Write your comment here..."></textarea>
+                </div>
+                <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200">Post Comment</button>
+            </form>
+        </div>
     </div>
 
     <script>

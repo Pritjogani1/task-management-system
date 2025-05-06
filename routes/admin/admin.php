@@ -33,8 +33,6 @@ Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('admin.t
     Route::put('users/{user}', [UserManagement::class, 'update'])->name('admin.users.update');
     Route::delete('users/{user}', [UserManagement::class, 'destroy'])->name('admin.users.destroy');
     
-    });
-
     Route::prefix('admins')->group(function(){
         Route::get('/',[AuthAdminController::class,'index'])->name('admin.admins.index');
 
@@ -70,6 +68,9 @@ Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('admin.t
         Route::delete('/{permission}/delete',[PermissionController::class,'destroy'])->name('admin.permission.destroy');
     });
     
+    });
+
+
 
 
 

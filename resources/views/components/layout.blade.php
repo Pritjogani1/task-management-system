@@ -83,12 +83,10 @@
                                 <a href="/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
                                 <a href="/settings" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Settings</a>
                                 <hr class="my-2">
-                                <form action="/logout" method="POST" class="block">
-                                    @csrf
-                                    <button type="submit" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">
-                                        Logout
-                                    </button>
-                                </form>
+                               
+                                   <a href="/logout" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
+                                   
+                                
                             </div>
                         </div>
                     @endauth

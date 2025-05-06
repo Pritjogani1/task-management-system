@@ -44,6 +44,7 @@ class RegisterUserController extends Controller
         ]);
 
         if (Auth::guard('user')->attempt($credentials)) {
+           
             $request->session()->regenerate();
 
             return redirect()->intended('dashboard');
@@ -56,6 +57,7 @@ class RegisterUserController extends Controller
 
     public function logout()
     {
+        
         Auth::guard('user')->logout();
 
         return redirect()->route('user.login');

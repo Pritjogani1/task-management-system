@@ -29,6 +29,26 @@
                         <label for="status" class="block text-sm font-semibold text-gray-700 mb-1">Status</label>
                         <p class="text-sm text-gray-500">{{ $task->status }}</p>
                     </div>
+                    
+                    <!-- Comments Section -->
+                    <div class="mt-4 pt-4 border-t">
+                        <h4 class="font-semibold text-gray-700 mb-2">Comments</h4>
+                        <div class="space-y-3">
+                            @forelse($task->comments as $comment)
+                                <div class="p-3 bg-gray-50 rounded-lg">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <p class="font-medium">{{ $comment->user_type == 'admin' ? 'Admin' : 'User' }}</p>
+                                            <p class="text-xs text-gray-500">{{ $comment->created_at->format('M d, Y H:i') }}</p>
+                                        </div>
+                                    </div>
+                                    <p class="mt-1 text-sm text-gray-700">{{ $comment->content }}</p>
+                                </div>
+                            @empty
+                                <p class="text-sm text-gray-500 italic">No comments yet.</p>
+                            @endforelse
+                        </div>
+                    </div>
                 </div>
             @empty
                 <p class="text-sm text-gray-500">No tasks found.</p>
