@@ -25,32 +25,37 @@ class TaskController extends Controller
         return view('admin.task-show', compact('task','users'));
         
     }
-
-
-
-public function update(Request $request, Task $task)
-{
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'description' => 'nullable|string',
-        'user_id' => 'required|exists:users,id',
-        'due_date' => 'nullable|date',
-        'priority' => 'required|in:low,medium,high',
-        'status' => 'required|in:pending,in_progress,completed',
-    ]);
     
+    // Add a new method to show a single task with comments
+    public function showTask(Task $task) {
+        $singleTask = $task->load('comments');
+        $users = User::all();
+        return view('admin.task-detail', compact('singleTask', 'users'));
+    }
 
-    $task->update($request->all());
+    public function update(Request $request, Task $task)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'user_id' => 'required|exists:users,id',
+            'due_date' => 'nullable|date',
+            'priority' => 'required|in:low,medium,high',
+            'status' => 'required|in:pending,in_progress,completed',
+        ]);
+        
 
-    return redirect()->route('admin.dashboard')->with('success', 'Task updated successfully.');
-}
+        $task->update($request->all());
 
-public function destroy(Task $task)
-{
-    $task->delete();
+        return redirect()->route('admin.dashboard')->with('success', 'Task updated successfully.');
+    }
 
-    return redirect()->route('admin.tasks.index')->with('success', 'Task deleted successfully.');
-}
+    public function destroy(Task $task)
+    {
+        $task->delete();
+
+        return redirect()->route('admin.tasks.index')->with('success', 'Task deleted successfully.');
+    }
 }
 
     

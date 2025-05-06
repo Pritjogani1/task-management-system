@@ -11,7 +11,7 @@ class TaskDetails extends Controller
 {
     public function index()
     {
-        $tasks = Task::where('user_id', Auth::user()->id)->get();
+        $tasks = Task::where('user_id', Auth::user()->id)->with('comments')->get();
         return view('user.taskdetails', compact('tasks'));
     }
 }

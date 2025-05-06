@@ -18,8 +18,16 @@ class CommentController extends Controller
         $comment = new Comment();
         $comment->content = $validated['content'];
         $comment->task_id = $task->id;
-        $comment->user_id = Auth::guard('admin')->user()->id;
-        $comment->user_type = 'admin'; // To identify admin comments
+
+        // Check which guard is being used to determine if it's an admin or user
+        if (Auth::guard('admin')->check()) {
+            $comment->user_id = Auth::guard('admin')->user()->id;
+            $comment->user_type = 'admin';
+        } else {
+            $comment->user_id = Auth::user()->id;
+            $comment->user_type = 'user';
+        }
+
         $comment->save();
 
         return redirect()->back()->with('success', 'Comment added successfully');

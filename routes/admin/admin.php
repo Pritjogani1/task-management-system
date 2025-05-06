@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\UserManagement;
 use App\Http\Controllers\AuthAdminController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\CommentController;
 
 Route::prefix("admin")->group(function() {
 
@@ -67,7 +68,7 @@ Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('admin.t
 
         Route::delete('/{permission}/delete',[PermissionController::class,'destroy'])->name('admin.permission.destroy');
     });
-    
+    Route::post('/tasks/{task}/comments', [CommentController::class, 'store'])->name('admin.tasks.comments.store');
     });
 
 

@@ -9,7 +9,10 @@ require __DIR__.'/user/user.php';
 require __DIR__.'/admin/admin.php';
 
 // Admin comment routes
-Route::post('/admin/tasks/{task}/comments', [CommentController::class, 'store'])->name('admin.tasks.comments.store');
+
+
+// User comment routes
+
 
 
 
