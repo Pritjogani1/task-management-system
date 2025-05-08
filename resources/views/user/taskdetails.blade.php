@@ -1,119 +1,190 @@
-<x-layout>
-    <div class="container mx-auto px-4 py-8">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-3xl font-bold text-gray-800">📋 My Tasks</h2>
-            <div class="flex space-x-2">
-                <span class="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-600">
-                    Total Tasks: {{ $tasks->count() }}
-                </span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Details - TaskFlow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <span class="text-2xl font-bold text-blue-600">TaskFlow</span>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="#" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                            <a href="#" class="text-gray-900 bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">My Tasks</a>
+                            <a href="#" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Team</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <img class="h-8 w-8 rounded-full" src="https://ui-avatars.com/api/?name=You" alt="You">
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <!-- Task Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @forelse($tasks as $task)
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                    <!-- Task Header -->
-                    <div class="p-5 border-b border-gray-100">
-                        <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-lg font-semibold text-gray-800 line-clamp-1">{{ $task->title }}</h3>
-                            <span class="px-3 py-1 rounded-full text-xs font-medium
-                                @if($task->priority == 'high')
-                                    bg-red-100 text-red-800
-                                @elseif($task->priority == 'medium')
-                                    bg-yellow-100 text-yellow-800
-                                @else
-                                    bg-green-100 text-green-800
-                                @endif">
-                                {{ ucfirst($task->priority) }}
-                            </span>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Task Details -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Task Header -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <input type="checkbox" class="h-5 w-5 text-blue-600 rounded border-gray-300">
+                            <h1 class="text-2xl font-bold text-gray-800">Update Project Documentation</h1>
                         </div>
-                        <p class="text-sm text-gray-600 line-clamp-2">{{ $task->description }}</p>
+                        <div class="flex items-center space-x-2">
+                            <button class="p-2 text-gray-600 hover:text-gray-800">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="p-2 text-gray-600 hover:text-gray-800">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
                     </div>
+                    <div class="flex items-center space-x-4 text-sm text-gray-500">
+                        <span class="flex items-center">
+                            <i class="fas fa-user mr-2"></i>
+                            Assigned to You
+                        </span>
+                        <span class="flex items-center">
+                            <i class="fas fa-calendar mr-2"></i>
+                            Due in 2 days
+                        </span>
+                        <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">In Progress</span>
+                    </div>
+                </div>
 
-                    <!-- Task Details -->
-                    <div class="p-5 space-y-4">
-                        <div class="flex justify-between items-center text-sm bg-gray-50 p-3 rounded-lg">
-                            <span class="text-gray-600 flex items-center">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                </svg>
-                                Due Date
-                            </span>
-                            <span class="font-medium">{{ \Carbon\Carbon::parse($task->due_date)->format('M d, Y') }}</span>
-                        </div>
-                        
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-600 text-sm">Status:</span>
-                            <span class="px-3 py-1 rounded-full text-xs font-medium
-                                @if($task->status == 'completed')
-                                    bg-blue-100 text-blue-800
-                                @elseif($task->status == 'in_progress')
-                                    bg-purple-100 text-purple-800
-                                @else
-                                    bg-gray-100 text-gray-800
-                                @endif">
-                                {{ ucfirst(str_replace('_', ' ', $task->status)) }}
-                            </span>
-                        </div>
+                <!-- Description -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Description</h2>
+                    <p class="text-gray-600">
+                        Update the project documentation to include the latest API changes and new features. 
+                        Make sure to include code examples and usage instructions.
+                    </p>
+                </div>
 
-                        <!-- Comments Section -->
-                        <div class="border-t pt-4 mt-4">
-                            <h4 class="font-medium text-gray-700 mb-3 flex items-center">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                                </svg>
-                                Comments ({{ $task->comments->count() }})
-                            </h4>
-
-                            <div class="space-y-2 max-h-32 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                                @forelse($task->comments as $comment)
-                                    <div class="bg-gray-50 p-3 rounded-lg">
-                                        <div class="flex justify-between items-center text-xs mb-1">
-                                            <span class="font-medium {{ $comment->user_type == 'admin' ? 'text-purple-600' : 'text-blue-600' }}">
-                                                {{ $comment->user_type == 'admin' ? 'Admin' : 'User' }}
-                                            </span>
-                                            <span class="text-gray-500">{{ $comment->created_at->format('M d, H:i') }}</span>
-                                        </div>
-                                        <p class="text-sm text-gray-700">{{ $comment->content }}</p>
+                <!-- Comments -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Comments</h2>
+                    <div class="space-y-4">
+                        <!-- Comment -->
+                        <div class="flex space-x-4">
+                            <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name=Admin" alt="Admin">
+                            <div class="flex-1">
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-sm font-medium text-gray-900">Admin</h3>
+                                        <span class="text-xs text-gray-500">2 hours ago</span>
                                     </div>
-                                @empty
-                                    <p class="text-sm text-gray-500 italic text-center">No comments yet.</p>
-                                @endforelse
+                                    <p class="mt-1 text-sm text-gray-600">
+                                        Please make sure to include the latest API endpoints in the documentation.
+                                    </p>
+                                </div>
                             </div>
-
-                            <!-- Add Comment Form -->
-                            <form action="{{ route('user.tasks.comments.store', $task->id) }}" method="POST" class="mt-3">
-                                @csrf
-                                <div class="flex space-x-2">
-                                    <input type="text" 
-                                        name="content" 
-                                        class="flex-1 text-sm border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                        placeholder="Write a comment..." 
-                                        required>
-                                    <button type="submit" 
-                                        class="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-purple-700 transition-colors duration-200 flex items-center">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                                        </svg>
-                                        Send
+                        </div>
+                        <!-- Comment Form -->
+                        <div class="flex space-x-4">
+                            <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name=You" alt="You">
+                            <div class="flex-1">
+                                <textarea rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Write a comment..."></textarea>
+                                <div class="mt-2 flex justify-end">
+                                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                        Comment
                                     </button>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            @empty
-                <div class="col-span-3 bg-white rounded-xl shadow-md p-8 text-center">
-                    <div class="text-gray-500 max-w-sm mx-auto">
-                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                        </svg>
-                        <p class="text-xl font-medium mb-2">No tasks found</p>
-                        <p class="text-sm text-gray-400">You don't have any tasks assigned yet. New tasks will appear here when they're assigned to you.</p>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Task Info -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Task Info</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-500">Status</label>
+                            <select class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <option value="todo">To Do</option>
+                                <option value="in_progress" selected>In Progress</option>
+                                <option value="review">Review</option>
+                                <option value="done">Done</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-500">Priority</label>
+                            <select class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <option value="high">High</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-500">Due Date</label>
+                            <input type="date" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
                     </div>
                 </div>
-            @endforelse
+
+                <!-- Attachments -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Attachments</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-file-pdf text-red-500 text-xl"></i>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">API_Documentation.pdf</p>
+                                    <p class="text-xs text-gray-500">2.4 MB</p>
+                                </div>
+                            </div>
+                            <button class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                        <button class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            <i class="fas fa-plus mr-2"></i>Add Attachment
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Activity Log -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Activity Log</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="w-2 h-2 mt-2 bg-blue-600 rounded-full"></div>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-600">Task assigned to you</p>
+                                <p class="text-xs text-gray-400">2 days ago</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-2 h-2 mt-2 bg-green-600 rounded-full"></div>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-600">You started working on the task</p>
+                                <p class="text-xs text-gray-400">1 day ago</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</x-layout>
+</body>
+</html>

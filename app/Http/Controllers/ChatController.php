@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin;
+use App\Events\NewMessage;
 use App\Models\Message;
-use App\Models\User;
+use App\Models\Admin;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -63,7 +64,32 @@ class ChatController extends Controller
             'receiver_type' => 'App\\Models\\Admin',
             'message' => $request->message,
         ]);
+
+        // Broadcast the new message
+        broadcast(new NewMessage($message))->toOthers();
         
-        return redirect()->back();
+        return response()->json([
+            'message' => $message,
+            'status' => 'success'
+        ]);
+    }
+    
+    public function send(Request $request)
+    {
+        $message = Message::create([
+            'sender_id' => Auth::id(),
+            'sender_type' => 'App\\Models\\User',
+            'receiver_id' => $request->receiver_id,
+            'receiver_type' => 'App\\Models\\User',
+            'message' => $request->message,
+            'is_read' => false,
+        ]);
+
+        broadcast(new NewMessage($message))->toOthers();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => $message
+        ]);
     }
 }

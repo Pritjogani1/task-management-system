@@ -1,109 +1,184 @@
-<x-layout>
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- User Profile Card -->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-6">
-                <div class="bg-gradient-to-r from-purple-500 to-blue-500 p-4">
-                    <div class="flex items-center space-x-4">
-                        <img class="h-16 w-16 rounded-full border-4 border-white shadow-md" 
-                            src="https://api.dicebear.com/6.x/initials/svg?seed={{ auth()->user()->name }}" 
-                            alt="{{ auth()->user()->name }}">
-                        <div class="text-black">
-                            <h2 class="text-2xl font-bold">{{ auth()->user()->name }}</h2>
-                            <p class="text-black">{{ auth()->user()->email }}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - TaskFlow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <span class="text-2xl font-bold text-blue-600">TaskFlow</span>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="#" class="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                            <a href="#" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">My Tasks</a>
+                            <a href="#" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Team</a>
+                            <a href="#" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Calendar</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <button class="p-2 text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="ml-4 flex items-center">
+                        <img class="h-8 w-8 rounded-full" src="https://ui-avatars.com/api/?name=User" alt="User">
+                        <span class="ml-2 text-gray-700">John Doe</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <!-- Welcome Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">Welcome back, John!</h1>
+                    <p class="text-gray-600 mt-1">Here's what's happening with your tasks today.</p>
+                </div>
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center">
+                    <i class="fas fa-plus mr-2"></i>New Task
+                </button>
+            </div>
+        </div>
+
+        <!-- Task Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                        <i class="fas fa-tasks text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-500">My Tasks</p>
+                        <p class="text-2xl font-semibold text-gray-800">12</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                        <i class="fas fa-clock text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-500">In Progress</p>
+                        <p class="text-2xl font-semibold text-gray-800">4</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100 text-green-600">
+                        <i class="fas fa-check-circle text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-500">Completed</p>
+                        <p class="text-2xl font-semibold text-gray-800">8</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task List -->
+        <div class="bg-white rounded-lg shadow-lg">
+            <div class="p-6 border-b">
+                <h2 class="text-lg font-semibold text-gray-800">Today's Tasks</h2>
+            </div>
+            <div class="divide-y divide-gray-200">
+                <!-- Task Item -->
+                <div class="p-6 hover:bg-gray-50">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input type="checkbox" class="h-5 w-5 text-blue-600 rounded border-gray-300">
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Update Project Documentation</h3>
+                                <p class="text-sm text-gray-500">Due today at 5:00 PM</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="px-3 py-1 text-sm rounded-full bg-yellow-100 text-yellow-800">In Progress</span>
+                            <button class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task Item -->
+                <div class="p-6 hover:bg-gray-50">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input type="checkbox" class="h-5 w-5 text-blue-600 rounded border-gray-300">
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Team Meeting</h3>
+                                <p class="text-sm text-gray-500">Due today at 2:00 PM</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800">Upcoming</span>
+                            <button class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task Item -->
+                <div class="p-6 hover:bg-gray-50">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input type="checkbox" class="h-5 w-5 text-blue-600 rounded border-gray-300">
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Review Pull Requests</h3>
+                                <p class="text-sm text-gray-500">Due tomorrow at 10:00 AM</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="px-3 py-1 text-sm rounded-full bg-purple-100 text-purple-800">Pending</span>
+                            <button class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Dashboard Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                
-          
-
-                <!-- Recent Tasks Card -->
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Recent Tasks</h3>
-\
-                    </div>
-                    <div class="space-y-3">
-                        @forelse($tasks as $task)
-                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <div>
-                                    <h4 class="font-medium text-gray-800">{{ $task->title }}</h4>
-                                    <p class="text-sm text-gray-500">Due: {{ \Carbon\Carbon::parse($task->due_date)->format('M d, Y') }}</p>
-                                </div>
-                                <div class="flex flex-col items-end space-y-2">
-                                    <span class="px-3 py-1 text-xs font-medium rounded-full
-                                        @if($task->priority == 'high') bg-red-100 text-red-800
-                                        @elseif($task->priority == 'medium') bg-yellow-100 text-yellow-800
-                                        @else bg-green-100 text-green-800 @endif">
-                                        {{ ucfirst($task->priority) }}
-                                    </span>
-                                    <span class="px-3 py-1 text-xs font-medium rounded-full
-                                        @if($task->status == 'completed') bg-green-100 text-green-800
-                                        @elseif($task->status == 'in_progress') bg-blue-100 text-blue-800
-                                        @else bg-gray-100 text-gray-800 @endif">
-                                        {{ ucfirst(str_replace('_', ' ', $task->status)) }}
-                                    </span>
-                                </div>
-                            </div>
-                        @empty
-                            <p class="text-gray-500 text-center py-4">No tasks assigned yet</p>
-                        @endforelse
-                    </div>
-                </div>
-
-                <!-- Task Statistics Card -->
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Task Overview</h3>
-                        <span class="text-purple-500">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-purple-50 rounded-lg p-4">
-                            <p class="text-sm text-purple-600">Pending</p>
-                            <p class="text-2xl font-bold text-purple-700">{{ $tasks->where('status', 'pending')->count() }}</p>
+        <!-- Upcoming Deadlines -->
+        <div class="mt-8 bg-white rounded-lg shadow-lg">
+            <div class="p-6 border-b">
+                <h2 class="text-lg font-semibold text-gray-800">Upcoming Deadlines</h2>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h4 class="text-gray-900">Project Presentation</h4>
+                            <p class="text-sm text-gray-500">Due in 2 days</p>
                         </div>
-                        <div class="bg-blue-50 rounded-lg p-4">
-                            <p class="text-sm text-blue-600">In Progress</p>
-                            <p class="text-2xl font-bold text-blue-700">{{ $tasks->where('status', 'in_progress')->count() }}</p>
-                        </div>
-                        <div class="bg-green-50 rounded-lg p-4">
-                            <p class="text-sm text-green-600">Completed</p>
-                            <p class="text-2xl font-bold text-green-700">{{ $tasks->where('status', 'completed')->count() }}</p>
-                        </div>
-                        <div class="bg-yellow-50 rounded-lg p-4">
-                            <p class="text-sm text-yellow-600">Total Tasks</p>
-                            <p class="text-2xl font-bold text-yellow-700">{{ $tasks->count() }}</p>
-                        </div>
+                        <span class="px-3 py-1 text-sm rounded-full bg-red-100 text-red-800">High Priority</span>
                     </div>
-                </div>
-
-                <!-- Quick Actions Card -->
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <a href="/tasks" class="flex flex-col items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors duration-200">
-                            <svg class="w-8 h-8 text-purple-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                            </svg>
-                            <span class="text-sm font-medium text-purple-700">View Tasks</span>
-                        </a>
-                        <a href="/profile" class="flex flex-col items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors duration-200">
-                            <svg class="w-8 h-8 text-blue-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                            </svg>
-                            <span class="text-sm font-medium text-blue-700">Profile</span>
-                        </a>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h4 class="text-gray-900">Client Meeting</h4>
+                            <p class="text-sm text-gray-500">Due in 3 days</p>
+                        </div>
+                        <span class="px-3 py-1 text-sm rounded-full bg-yellow-100 text-yellow-800">Medium Priority</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</x-layout>
+</body>
+</html>
