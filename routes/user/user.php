@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\User\RegisterUserController;
 use App\Http\Controllers\User\TaskDetails;
 use Dotenv\Util\Regex;
@@ -22,5 +23,6 @@ Route::middleware("auth:user")->group(function() {
     Route::get("tasks", [TaskDetails::class, "index"])->name("user.task-details");
     Route::post('/user/tasks/{task}/comments', [CommentController::class, 'store'])->name('user.tasks.comments.store');
 });
+
 
    

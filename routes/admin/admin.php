@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\TaskController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserManagement;
 use App\Http\Controllers\AuthAdminController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CommentController;
@@ -72,8 +73,10 @@ Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('admin.t
     });
 
 
+ 
 
-
+   
+        
 
 
 });

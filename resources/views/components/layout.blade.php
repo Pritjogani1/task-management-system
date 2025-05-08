@@ -62,6 +62,8 @@
                         class="text-white hover:text-blue-400 transition-colors duration-200">Dashboard</x-nav-link>
                     <x-nav-link href="/tasks" :active="request()->is('tasks')" 
                         class="text-white hover:text-blue-400 transition-colors duration-200">My Tasks</x-nav-link>
+                    <x-nav-link href="{{ route('chat.index') }}" :active="request()->is('chat*')" 
+                        class="text-white hover:text-blue-400 transition-colors duration-200">Messages</x-nav-link>
                 </div>
 
                 <!-- User Menu -->
