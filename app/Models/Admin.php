@@ -26,4 +26,15 @@ class Admin extends Authenticatable
             $query->where("key", $permission);
         })->exists();
     }
+
+    public function sentMessages()
+    {
+        return $this->morphMany(Message::class, 'sender');
+    }
+
+    public function receivedMessages()
+    {
+        return $this->morphMany(Message::class, 'receiver')
+                ->where('is_read', false);
+    }
 }

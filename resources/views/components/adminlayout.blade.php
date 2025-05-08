@@ -26,6 +26,7 @@
                 <li><a href="{{route('admin.users.index')}}"  class="block hover:bg-gray-700 px-3 py-2 rounded">Users</a></li>
                 @endcan
                 <li><a href="{{route('admin.tasks.all')}}" class="block hover:bg-gray-700 px-3 py-2 rounded">Tasks</a></li>
+                <li><a href="{{route('admin.chat.index')}}" class="block hover:bg-gray-700 px-3 py-2 rounded">Chat</a></li>
 
             </ul>
             <a href="{{ route('admin.admins.index') }}" :active="request()->is('admins*')"
