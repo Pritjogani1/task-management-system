@@ -22,33 +22,69 @@ class AdminChatController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
+        return view('admin.chat.show', compact('user'));
+    }
+
+    public function getMessages($id)
+    {
+        $user = User::findOrFail($id);
         
         // Get messages between the current admin and the selected user
         $messages = Message::where(function($query) use ($id) {
                 $query->where('sender_id', Auth::guard('admin')->id())
-                      ->where('sender_type', 'App\\Models\\Admin')
+                      ->where('sender_type', 'admin')
                       ->where('receiver_id', $id)
-                      ->where('receiver_type', 'App\\Models\\User');
+                      ->where('receiver_type', 'user');
             })
             ->orWhere(function($query) use ($id) {
                 $query->where('sender_id', $id)
-                      ->where('sender_type', 'App\\Models\\User')
+                      ->where('sender_type', 'user')
                       ->where('receiver_id', Auth::guard('admin')->id())
-                      ->where('receiver_type', 'App\\Models\\Admin');
+                      ->where('receiver_type', 'admin');
             })
             ->orderBy('created_at')
             ->get();
             
         // Mark messages as read
         Message::where('sender_id', $id)
-              ->where('sender_type', 'App\\Models\\User')
-              ->where('receiver_id', Auth::guard('admin')->id())
-              ->where('receiver_type', 'App\\Models\\Admin')
+              ->where('sender_type', 'user')
+               ->where('receiver_id', Auth::guard('admin')->id())
+              ->where('receiver_type', 'admin')
               ->where('is_read', false)
               ->update(['is_read' => true]);
         
-        return view('admin.chat.show', compact('user', 'messages'));
+        return response()->json($messages);
     }
+    
+    public function loadmessages($id){
+        $user = User::findOrFail($id);
+        $admin = Auth::guard('admin')->user();
+        
+        // Get messages between the current admin and the selected user
+        $messages = Message::where(function($query) use ($id) {
+                $query->where('sender_id', Auth::guard('admin')->id())
+                      ->where('sender_type', 'admin')
+                      ->where('receiver_id', $id)
+                      ->where('receiver_type', 'user');
+            })
+            ->orWhere(function($query) use ($id) {
+                $query->where('sender_id', $id)
+                      ->where('sender_type', 'user')
+                      ->where('receiver_id', Auth::guard('admin')->id())
+                      ->where('receiver_type', 'admin');
+            })
+            ->orderBy('created_at')
+            ->get();
+            
+        // Mark messages as read
+        Message::where('sender_id', $id)
+              ->where('sender_type', 'user')
+               ->where('receiver_id', Auth::guard('admin')->id())
+              ->where('receiver_type', 'admin')
+              ->where('is_read', false)
+              ->update(['is_read' => true]);
+        return response()->json($messages);
+    }                       
     
     public function store(Request $request)
     {
@@ -59,12 +95,12 @@ class AdminChatController extends Controller
         
         $message = Message::create([
             'sender_id' => Auth::guard('admin')->id(),
-            'sender_type' => 'App\\Models\\Admin',
+            'sender_type' => 'admin',
             'receiver_id' => $request->user_id,
-            'receiver_type' => 'App\\Models\\User',
+            'receiver_type' => 'user',
             'message' => $request->message,
         ]);
         
-        return redirect()->back();
+        return response()->json($message);  
     }
 }

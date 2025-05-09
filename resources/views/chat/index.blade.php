@@ -28,4 +28,7 @@
          
         </div>
     </div>
+    <script>
+        console.log('chat index');
+    </script>
 </x-layout>

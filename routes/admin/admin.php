@@ -9,6 +9,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\Admin\AdminChatController;
 
 Route::prefix("admin")->group(function() {
 
@@ -24,8 +25,8 @@ Route::prefix("admin")->group(function() {
     Route::get('tasks', [TaskController::class, 'tasks'])->name('admin.tasks');
     Route::post('tasks', [TaskController::class, 'store'])->name('admin.tasks.store');
     Route::get('tasksall', [TaskController::class, 'show'])->name('admin.tasks.all');
-Route::put('tasks/{task}', [TaskController::class, 'update'])->name('admin.tasks.update');
-Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('admin.tasks.destroy');
+    Route::put('tasks/{task}', [TaskController::class, 'update'])->name('admin.tasks.update');
+    Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('admin.tasks.destroy');
 
     Route::get('users', [UserManagement::class, 'index'])->name('admin.users.index')->can('user');
     Route::post('users', [UserManagement::class, 'store'])->name('admin.users.store');
@@ -70,6 +71,12 @@ Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('admin.t
         Route::delete('/{permission}/delete',[PermissionController::class,'destroy'])->name('admin.permission.destroy');
     });
     Route::post('/tasks/{task}/comments', [CommentController::class, 'store'])->name('admin.tasks.comments.store');
+
+    // Chat routes
+    Route::get('/chat', [AdminChatController::class, 'index'])->name('admin.chat.index');
+    Route::get('/chat/{id}', [AdminChatController::class, 'show'])->name('admin.chat.show');
+    Route::get('/chat/{id}/messages', [AdminChatController::class, 'getMessages'])->name('admin.chat.getmessages');
+    Route::post('/chat/send', [AdminChatController::class, 'store'])->name('admin.chat.store');
     });
 
 

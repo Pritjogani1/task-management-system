@@ -13,6 +13,7 @@ require __DIR__.'/admin/admin.php';
 Route::middleware(['auth'])->group(function () {
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/chat/{id}', [ChatController::class, 'show'])->name('chat.show');
+    Route::get('/chat/{id}/messages', [ChatController::class, 'getmessages'])->name('chat.getmessages');
     Route::post('/chat/send', [ChatController::class, 'store'])->name('chat.store');
 });
 

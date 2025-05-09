@@ -42,22 +42,28 @@
                             </div>
                             <div class="bg-gray-50 p-3 rounded-lg">
                                 <p class="text-xs text-gray-500 mb-1">Due Date</p>
-                                <p class="text-sm font-medium text-gray-700">{{ \Carbon\Carbon::parse($singleTask->due_date)->format('M d, Y') }}</p>
+                                <p class="text-sm font-medium text-gray-700">
+                                    {{ \Carbon\Carbon::parse($singleTask->due_date)->format('M d, Y') }}
+                                </p>
                             </div>
                         </div>
 
-                        <!-- Assigned User -->
+                        <!-- Assigned Users -->
                         <div class="bg-gray-50 p-3 rounded-lg">
                             <p class="text-xs text-gray-500 mb-1">Assigned to</p>
-                            <div class="flex items-center space-x-2">
-                                <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                                    <span class="text-sm font-medium text-purple-700">
-                                        {{ substr($users->find($singleTask->user_id)->name ?? 'U', 0, 1) }}
-                                    </span>
-                                </div>
-                                <span class="text-sm font-medium text-gray-700">
-                                    {{ $users->find($singleTask->user_id)->name ?? 'Unassigned' }}
-                                </span>
+                            <div class="flex flex-wrap gap-2">
+                                @forelse($singleTask->users as $user)
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                                            <span class="text-sm font-medium text-purple-700">
+                                                {{ strtoupper(substr($user->name, 0, 1)) }}
+                                            </span>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-700">{{ $user->name }}</span>
+                                    </div>
+                                @empty
+                                    <span class="text-sm text-gray-500">Unassigned</span>
+                                @endforelse
                             </div>
                         </div>
 
@@ -110,7 +116,7 @@
                             <div class="mb-4">
                                 <label class="block text-sm font-semibold text-gray-700 mb-1">Assign to Users</label>
                                 <select name="user_id" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300">
-                                    @foreach($users as $user)
+                                    @foreach($task->users as $user)
                                         <option value="{{ $user->id }}" {{ $singleTask->user_id == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
                                     @endforeach
                                 </select>
@@ -191,15 +197,214 @@
                 </div>
             @endforeach
         </div>
+        
     </div>
 
+    <!-- Modal Container -->
+    <div id="taskModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-2/3 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="absolute top-0 right-0 pt-4 pr-4">
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-500">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div id="modalContent" class="mt-3"></div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="text-center">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Delete Task</h3>
+                <p class="text-gray-500 mb-4">Are you sure you want to delete this task? This action cannot be undone.</p>
+                <div class="flex justify-center space-x-4">
+                    <button id="confirmDelete" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                        Delete
+                    </button>
+                    <button onclick="closeDeleteModal()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+
     <script>
-        function toggleEditForm(taskId) {
-            document.getElementById(`edit-form-${taskId}`).classList.toggle('hidden');
+        // Modal Functions
+        function openModal(content) {
+            $('#modalContent').html(content);
+            $('#taskModal').removeClass('hidden');
+            $('body').addClass('overflow-hidden');
         }
 
-        function toggleCommentForm(taskId) {
-            document.getElementById(`comment-section-${taskId}`).classList.toggle('hidden');
+        function closeModal() {
+            $('#taskModal').addClass('hidden');
+            $('body').removeClass('overflow-hidden');
         }
+
+        function openDeleteModal(taskId) {
+            $('#deleteModal').removeClass('hidden');
+            $('#confirmDelete').data('taskId', taskId);
+            $('body').addClass('overflow-hidden');
+        }
+
+        function closeDeleteModal() {
+            $('#deleteModal').addClass('hidden');
+            $('body').removeClass('overflow-hidden');
+        }
+
+        // Edit Form Functions
+        function toggleEditForm(taskId) {
+            const formContent = $(`#edit-form-${taskId}`).html();
+            openModal(formContent);
+            initializeEditValidation();
+        }
+
+        // Comment Section Functions
+        function toggleCommentForm(taskId) {
+            const commentContent = $(`#comment-section-${taskId}`).html();
+            openModal(commentContent);
+            initializeCommentValidation();
+        }
+
+        // Initialize Edit Form Validation
+        function initializeEditValidation() {
+            $("#editTaskForm").validate({
+                rules: {
+                    title: {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 100
+                    },
+                    description: {
+                        required: true,
+                        minlength: 10
+                    },
+                    user_id: {
+                        required: true
+                    },
+                    due_date: {
+                        required: true,
+                        date: true
+                    },
+                    priority: {
+                        required: true
+                    },
+                    status: {
+                        required: true
+                    }
+                },
+                messages: {
+                    title: {
+                        required: "Please enter a task title",
+                        minlength: "Title must be at least 3 characters",
+                        maxlength: "Title cannot exceed 100 characters"
+                    },
+                    description: {
+                        required: "Please enter a description",
+                        minlength: "Description must be at least 10 characters"
+                    },
+                    user_id: "Please select a user",
+                    due_date: {
+                        required: "Please select a due date",
+                        date: "Please enter a valid date"
+                    },
+                    priority: "Please select a priority level",
+                    status: "Please select a status"
+                },
+                errorElement: 'span',
+                errorClass: 'text-red-500 text-sm',
+                errorPlacement: function(error, element) {
+                    error.insertAfter(element);
+                },
+                highlight: function(element) {
+                    $(element).addClass('border-red-500').removeClass('border-green-500');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('border-red-500').addClass('border-green-500');
+                },
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
+        }
+
+        // Initialize Comment Form Validation
+        function initializeCommentValidation() {
+            $("#commentForm").validate({
+                rules: {
+                    content: {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 500
+                    }
+                },
+                messages: {
+                    content: {
+                        required: "Please enter a comment",
+                        minlength: "Comment must be at least 2 characters",
+                        maxlength: "Comment cannot exceed 500 characters"
+                    }
+                },
+                errorElement: 'span',
+                errorClass: 'text-red-500 text-sm',
+                errorPlacement: function(error, element) {
+                    error.insertAfter(element);
+                },
+                highlight: function(element) {
+                    $(element).addClass('border-red-500').removeClass('border-green-500');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('border-red-500').addClass('border-green-500');
+                },
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
+        }
+
+        // Delete Confirmation
+        $('#confirmDelete').click(function() {
+            const taskId = $(this).data('taskId');
+            $(`#deleteForm-${taskId}`).submit();
+        });
+
+        // Close modal when clicking outside
+        $(window).click(function(event) {
+            if ($(event.target).is('#taskModal, #deleteModal')) {
+                closeModal();
+                closeDeleteModal();
+            }
+        });
+
+        // Prevent modal close when clicking inside modal content
+        $('.modal-content').click(function(event) {
+            event.stopPropagation();
+        });
     </script>
+
+    <style>
+        .error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
+        input.error, textarea.error, select.error {
+            border-color: #dc3545 !important;
+        }
+        input.valid, textarea.valid, select.valid {
+            border-color: #28a745 !important;
+        }
+        .modal-open {
+            overflow: hidden;
+        }
+    </style>
 </x-adminlayout>

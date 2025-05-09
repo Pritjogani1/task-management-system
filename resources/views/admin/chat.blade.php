@@ -30,6 +30,7 @@ x-adminlayout>
                 <form id="messageForm" class="flex space-x-2">
                     @csrf
                     <input type="hidden" name="receiver_id" value="{{ $user->id }}">
+                    <input type="hidden" name="receiver_type" value="{{$user->role->name}}">
                     <input type="text" name="message" class="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Type your message...">
                     <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">Send</button>
                 </form>

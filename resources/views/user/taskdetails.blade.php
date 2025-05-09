@@ -83,7 +83,7 @@
                             </div>
 
                             <!-- Add Comment Form -->
-                            <form action="{{ route('user.tasks.comments.store', $task->id) }}" method="POST" class="mt-3">
+                            <form action="{{ route('user.tasks.comments.store', $task->id) }}" method="POST" class="mt-3" id="comment">
                                 @csrf
                                 <div class="flex space-x-2">
                                     <input type="text" 

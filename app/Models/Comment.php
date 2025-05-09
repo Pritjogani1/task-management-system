@@ -20,8 +20,9 @@ class Comment extends Model
     {
         return $this->belongsTo(Admin::class, 'user_id')->where('user_type', 'admin');
     }
-    public function user()
+
+public function comments()
 {
-    return $this->belongsTo(User::class);
+    return $this->hasMany(Comment::class);
 }
 }

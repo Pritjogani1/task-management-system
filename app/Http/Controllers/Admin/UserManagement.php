@@ -19,11 +19,11 @@ class UserManagement extends Controller
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required',
-        //     'email' => 'required|email|unique:users',
-        //     'password' => 'required|min:6',
-        // ]);
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+        ]);
 
         User::create([
             'name' => $request->name,

@@ -11,18 +11,41 @@ class TaskController extends Controller
 {
     public function tasks() {
         $users = User::all();
+
         
         return view('admin.create-task', compact('users'));
     }
     public function store(Request $request) {
-       
-        $task = Task::create($request->all());
+//   dd($request->all());
+      $validated  =   $request->validate([
+            
+            'title' =>'required|string|max:255|unique:tasks',
+            'description' => 'nullable|string|max:1000',
+           'user_ids' => 'required|array',
+            'user_ids.*' => 'exists:users,id',
+            'due_date' => 'nullable|date',
+            'priority' =>'required|in:low,medium,high',
+           'status' =>'required|in:pending,in_progress,completed',
+           
+        ]);
+
+        $task = Task::create(
+            [
+                'title' => $validated['title'],
+                'description' => $validated['description'],
+                'due_date' => $validated['due_date'],
+                'priority' => $validated['priority'],
+                'status' => $validated['status'],
+
+            ]
+        );
+        $task->users()->attach($validated['user_ids']);
         return redirect()->route('admin.dashboard');
     }
     public function show() {
-        $task = Task::all();
-        $users = User::all();
-        return view('admin.task-show', compact('task','users'));
+        $task = Task::with('users')->get();
+        
+        return view('admin.task-show', compact('task'));
         
     }
     

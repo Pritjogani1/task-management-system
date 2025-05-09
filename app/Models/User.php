@@ -57,4 +57,9 @@ class User extends Authenticatable
         return $this->morphMany(Message::class, 'receiver')
                     ->where('is_read', false);
     }
+    public function tasks()
+{
+    return $this->belongsToMany(Task::class);
+}
+  
 }
